@@ -19,6 +19,8 @@ fs_mp3s = gridfs.GridFS(mongo_mp3.db)
 connection = pika.BlockingConnection(pika.ConnectionParameters(host="rabbitmq", heartbeat=0))
 channel = connection.channel()
 
+unauth_count = 0
+
 @server.route("/login", methods=["POST"])
 def login():
     token, err = access.login(request)
@@ -33,7 +35,8 @@ def upload():
     access, err = validate.token(request)
 
     if err:
-        unauth_count.inc()
+        global unauth_count
+        unauth_count += 1 
         return err
 
     access = json.loads(access)
@@ -57,7 +60,8 @@ def download():
     access, err = validate.token(request)
 
     if err:
-        unauth_count.inc()
+        global unauth_count
+        unauth_count += 1
         return err
 
     access = json.loads(access)
