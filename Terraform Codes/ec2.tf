@@ -19,7 +19,7 @@ resource "aws_instance" "videotoaudioserver" {
   connection {
     type        = "ssh"
     user        = "ubuntu"
-    private_key = file("Ahmed.pem")
+    private_key = file("your.pem")
     host        = self.public_ip
   }
 
